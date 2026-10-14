@@ -1,3 +1,4 @@
 title: Prolly
 description: Prolly
-theme: jekyll-theme-hacker
+theme: minima
+markdown: kramdown
