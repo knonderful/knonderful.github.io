@@ -1,17 +1,21 @@
-
 ---
 layout: home
 title: Home
 ---
 
-# Welcome to My Website
+# Welcome
 
-Hello! This is my website built with Jekyll and GitHub Pages.
+This is pretty bare for the time being.
 
-## About me
+# Recent Posts
 
-Write a little about yourself, your interests, or your projects.
+<ul>
+{% for post in site.posts limit:5 %}
+  <li>
+    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+    <small>({{ post.date | date: "%Y-%m-%d" }})</small>
+  </li>
+{% endfor %}
+</ul>
 
-## Contact
-
-[Email me](mailto:you@example.com)
+[View all posts]({{ "/blog/" | relative_url }})
