@@ -1,4 +1,4 @@
-title: Prolly
-description: Prolly
-theme: minima
+title: prolly.de
+description: A site that probably shows you something.
+theme: jekyll-theme-hacker
 markdown: kramdown
