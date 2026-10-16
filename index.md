@@ -17,4 +17,4 @@ This is pretty bare for the time being.
 {% endfor %}
 </ul>
 
-[View all posts]({{ "/blog/" | relative_url }})
+[View all posts]({{ "/posts" | relative_url }})

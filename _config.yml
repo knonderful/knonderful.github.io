@@ -2,3 +2,4 @@ title: prolly.de
 description: A site that probably shows you something.
 theme: jekyll-theme-hacker
 markdown: kramdown
+show_downloads: false
