@@ -640,7 +640,7 @@ fn consume() {
 In the example above we use Rust's `break` with return value for `loop` to capture the result without the need for something like
 `Option<T>` (accompanied with the usual unwrapping).
 This is useful when the code after the generator consumption needs the result value.
-But often the result will be something like `Result<(), E>` and the caller just wants to act on the error, if it exists.
+But often the result will be something like `Result<(), E>` and the caller just wants abort on an error.
 For such cases a `for`-loop is more convenient:
 
 ```rust
