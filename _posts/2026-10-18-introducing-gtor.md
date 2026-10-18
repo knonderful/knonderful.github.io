@@ -525,6 +525,7 @@ Let's move on then.
 Enter `gtor`.
 The aim of `gtor` is to provide ergonomic generators (both for implementor and consumer) that have a sufficiently small footprint that they
 can be used without too much concern in terms of performance.
+In `stable` Rust.
 
 Let's see what that looks like:
 
