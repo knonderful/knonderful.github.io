@@ -692,16 +692,16 @@ fn consume() {
 ```
 
 First, this type of generator does not implement `Iterator`.
-While this would be technically possible, `gtor` explicitly opts out of this because developers will intuitively assume that a `for` loop
-will eventually end, which would not be the case.
-Additionally, this is supported by this idea that infinite generators will probably be useful for generation of some counter value, unique
-IDs or some randomized number.
+While this would be technically possible, `gtor` explicitly opts out of this because developers intuitively assume that a `for` loop will
+eventually end, which would not be the case here.
+Additionally, infinite generators will probably be useful for generation of some counter value, unique IDs or some randomized number.
 Most of these use cases will not want to loop on the generator, but rather have some other mechanism like a game loop or an input stream
 that drives the pulling of the value.
 
-Secondly, `Iterator` returns `Option<T>`, but we already know that our values are not optional; if the generator is polled, there will be
+Secondly, `Iterator` returns `Option<T>`, but we already know that our values are not optional; when the generator is polled, there will be
 value.
-This alleviates the caller from having to do the unwrapping and decreases complexity on the calling side.
+This means that `next_value()` can return `Y` instead of `Option<Y>`.
+This alleviates the caller from having to do the unwrapping and decreases the overall complexity.
 
 ## Performance
 
@@ -740,7 +740,7 @@ When just working with the intended mechanics of `#[generator]` the user is not 
 
 ### No Sending of Values
 
-Many co-routine/generator crates support passing values into the generator, based on which the generator can base its response.
+Many co-routine/generator crates support passing values into the generator, based on which the generator can generate its response.
 `gtor` (currently) explicitly does not support this.
 This kind of thing can be implemented in different ways, none of which are a fit for every use case and it all complicates the solution.
 Additionally, it seems like this kind of "need" takes a step in the direction of state machine programming for which a function (or a lambda
