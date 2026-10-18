@@ -516,6 +516,7 @@ Once an object is pinned it can not be moved anymore.
 The final key to the puzzle is both `Future` and `Coroutine` requiring a `Pin<&mut Self>` for their state-advancing operations, rather than
 a `&mut self`.
 The developer can pin an object either on the stack with `pin!()` or on the heap with `Box::pin()`.
+With the object now pinned, we can actually operate the `Future` or `Coroutine` methods.
 
 Let's move on then.
 
