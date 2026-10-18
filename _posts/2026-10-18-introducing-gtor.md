@@ -390,16 +390,6 @@ And even with our "convenient" example earlier one could argue that the implemen
 If a developer has to apply this kind of practice in multiple places in the code base, they will surely be tempted to reach for the
 callback or collection approach before long.
 
-And one more nitpick about going through `Iterator` is that it gets awkward with fallible operations.
-Say that our `InputStream` can fail (which it should actually do in the real world if we want to support streaming).
-Then that means that `QuoteProvider::next_quote()` is also fallible.
-But if we want to implement `Iterator` around a fallible operation, we end up with `type Item = Result<Quote>`, which means the iterator
-returns `Option<Result<Quote>>`.
-A more appropriate type would be `Result<Option<Quote>>`, since we can only evaluate the "optionality" once we've managed to read the input
-without failure.
-But this is more a shortcoming of the `Iterator` trait and Rust's commitment to this trait when it comes to `for`-loop ergonomics. (Try to
-implement an iterator in C++ and you'll quickly stop complaining about these kind of details with any kind of commitment.)
-
 Maybe we'll have to look beyond our regular Rust capabilities, then.
 
 ## Using a Generator
