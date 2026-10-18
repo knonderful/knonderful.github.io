@@ -754,6 +754,5 @@ Generators can still be used to ergonomically return any number of items "on top
 ------
 
 [^1]: It looks like the reason for this is that the recipient of the produced value will often want to perform some kind of follow-up action
-with
-the result (in this case even possibly aborting the application), which a callback naturally prevents the caller from carrying out, since
-the control flow is on the callee's side: the caller can not "escape" from the callback.
+      with the result (in this case even possibly aborting the application), which a callback naturally prevents the caller from carrying
+      out, since the control flow is on the callee's side: the caller can not "escape" from the callback.
