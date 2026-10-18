@@ -15,7 +15,7 @@ intuitive approach for both implementation and consumption of generators.
 
 # Use case
 
-Let's say we want have an application that searches for quotes in a book and presents them to the user.
+Let's say we want to have an application that searches for quotes in a book and presents them to the user.
 The user can provide the name of a character that must be mentioned in the quote and for each match the user is asked whether to keep that
 quote, discard the quote or abort the search.
 A CLI version of this application could look like something like this:
@@ -124,7 +124,7 @@ Ultimately, collecting all items in a collection doesn't scale well.
 And then there's a second problem with this approach, which is that all quotes get processed from the input stream _before_ the user is
 queried.
 If the user decides to abort on the 3rd quote and we have 1000 quotes, then that means we unnecessarily processed 997 quotes.
-When reading from a local SSD this will be likely be unnoticable but if the book is streamed from a slow network connection the user will
+When reading from a local SSD this will likely be noticeable, but if the book is streamed from a slow network connection the user will
 end up waiting pointlessly.
 
 And there are more problems with this approach that are not applicable to this example, but are mention-worthy:
@@ -384,7 +384,7 @@ We could pass the `speaker_filter` into `QuoteIter`, but then we need a generic 
 I doubt we're getting closer to readable code with such changes.
 
 And even with our "convenient" example above, one could argue that the implementation involves a lot of boiler plate code.
-If a developer has to apply this kind of of practice in multiple places in the code base, they will surely be tempted to reach for the
+If a developer has to apply this kind of practice in multiple places in the code base, they will surely be tempted to reach for the
 callback or collection approach before long.
 
 And one more nitpick about going through `Iterator` is that it gets awkward with fallible operations.
@@ -417,7 +417,7 @@ for number in count_up_to_5():
 In this Python example we see `count_up_to_5()` being called in a `for`-loop.
 The Python run-time will run the code of `count_up_to_5()` up to `yield i`, then take the `i` and apply it to `number`.
 Then it will execute the iteration of the bottom `for`-loop (in this case printing the number) and then resume the state of
-`count_up_to_5()` after the `yield i` point, which will cause another iteration and then yield the value `2`, which then gets appled to the
+`count_up_to_5()` after the `yield i` point, which will cause another iteration and then yield the value `2`, which then gets applied to the
 `number` variable, etc.
 This continues until `count_up_to_5()` reaches the end of its block, causing the bottom `for` loop to terminate.
 
@@ -505,13 +505,13 @@ fn process_quotes(quote_provider: QuoteProvider) {
 As opposed to our earlier `Iterator` implementation attempts, `CoroIter` actually is general-purpose and can be used for any coroutine that
 produces `()` as a result.
 
-There is only one tiny litte caveat: generators are is not available in `stable` Rust, so we can practically not use them.
+There is only one tiny little caveat: generators are not available in `stable` Rust, so we practically cannot use them.
 
 Before we move on, what is with the `pin!()` and how Rust actually implements these co-routines?
 I'm glad you asked both these questions at the same time, because they are related.
 You see, Rust generates a state machine out of the expression following `#[coroutine]`.
 The state machine gets polled via `Coroutine::resume()`, which effectively advances the state and delivers results to the poller.
-If that sounds familiar, it is probably because that essentially identical to how `async` and `Future::poll()` work.
+If that sounds familiar, it is probably because that is essentially identical to how `async` and `Future::poll()` work.
 We'll get back to that.
 
 As for the `pin!()`: the generated state machine contains references (pointers) to itself.
@@ -602,7 +602,7 @@ fn process_quotes(quote_provider: QuoteProvider) {
 }
 ```
 
-This is much nicer an more intuitive than `QuoteIter`.
+This is much nicer and more intuitive than `QuoteIter`.
 
 Note that we can't use `impl Trait` in `#[generator]` for the same reason that we have to use explicit lifetimes for this macro.
 
@@ -724,7 +724,7 @@ The reasoning behind `gtor` is that a generator is more a "behavioral characteri
 An object is often driven by the data that it encapsules and then we add some methods to interact with that data.
 But for generators we don't really care about the data inside the generator; it is the behavior that we are interested in.
 The same kind of reasoning can be applied to `async` functions.
-Therefor, it makes sense to apply the "generatorism" on a function rather than a local object, since functions also have this
+Therefore, it makes sense to apply the "generatorism" on a function rather than a local object, since functions also have this
 behavior-focus.
 An example of this is the use case described in this article: "the callee produces the quotes for the caller to consume".
 We start with a callee (a function), since that is how software expresses behavior.
@@ -739,7 +739,7 @@ Every `yield_value!()` gets transformed into a call to the context object with t
 This call is then `.await`ed, causing the `Future` to be suspended.
 The machinery around the future pulls the value from the context and passes it to the calling code.
 
-The method for yielding a value to the context is marked `unsafe`, since the caller must ensure that non of its constraints are violated,
+The method for yielding a value to the context is marked `unsafe`, since the caller must ensure that none of its constraints are violated,
 which could result in various kinds of undefined behavior.
 When just working with the intended mechanics of `#[generator]` the user is not exposed to this and no `unsafe` code has to be called.
 
@@ -751,7 +751,7 @@ This kind of thing can be implemented in different ways, none of which are a fit
 Additionally, it seems like this kind of "need" takes a step in the direction of state machine programming for which a function (or a lambda
 expression, for that matter) is not a good option, since it tends to end up with a long function with a lot of branching, the disadvantages
 quickly outweighing the advantages.
-Things really bad if the state machine has arrows that point back to a previous state.
+Things get really bad if the state machine has arrows that point back to a previous state.
 In such cases it is often better to express the different states and their transitions explicitly, rather than them being implicit as part
 of your function.
 Generators can still be used to ergonomically return any number of items "on top" of this state machine machinery.
