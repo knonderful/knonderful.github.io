@@ -54,7 +54,7 @@ struct QuoteProvider<'a> {
 
 impl QuoteProvider<'_> {
     fn next_quote(&mut self) -> Option<Quote> {
-        // Read next quote from input stream and match with `self.mentioning` -> omitted as implementation detail
+        // Read next quote from input stream and match with `self.mentioning`
         // -> omitted as implementation detail
     }
 }
@@ -79,6 +79,12 @@ fn handle_quote(quote: Quote) -> bool {
     // -> omitted as implementation detail
 }
 
+fn main() {
+    // let input = //... <- read book
+    // let mentioned ... <- get `mentioning` parameter
+    let quote_provider = QuoteProvider{ input, mentioned };
+    process_quotes(quote_provider);
+}
 ```
 
 So we have `process_quotes()` as the _caller_ and `find_quotes()` as the _callee_.
@@ -249,7 +255,7 @@ Let's call this function `search_for_quotes()`.
 `process_quotes()` calls `search_for_quotes()`, passing its callback function in.
 Then `search_for_quotes()` has to take that callback and pass it into `find_quotes()`, possibly wrapped with its own lambda expression that
 adds more logic and thus complexity.
-The problem here is that there is not clear visual clue that `find_quotes()` is calling back up to `process_quotes()`.
+The problem here is that there is no clear visual clue that `find_quotes()` is calling back up to `process_quotes()`.
 We are used to looking at parameters passed in a "downward" manner: a function call gets a parameter passed and it may use that "thing".
 We don't naturally consider that that "thing" influences the code in the current function from 2 or three layers deeper in the call stack.
 
@@ -318,7 +324,7 @@ fn get_internet_quotes() -> Vec<Quote> {
 }
 
 struct QuoteIter<'a> {
-    internet_quotes: IntoIter<Quote>,
+    internet_quotes: std::vec::IntoIter<Quote>,
     quote_provider: QuoteProvider<'a>,
     quote_provider_consumed: bool,
 }
@@ -335,10 +341,6 @@ impl Iterator for QuoteIter<'_> {
         }
         self.internet_quotes.next()
     }
-}
-
-struct QuoteProviderIter<'a> {
-    quote_provider: QuoteProvider<'a>,
 }
 
 fn find_quotes<'a>(
@@ -376,14 +378,15 @@ fn process_quotes(quote_provider: QuoteProvider) {
 }
 ```
 
-Now, when looking at the `Iterator::next()` of `QuoteIter` it becomes a lot less intuitive what this code actually does (or _should_ do).
+Now, when looking at the `Iterator::next()` of `QuoteIter` it becomes a lot less intuitive what this code actually does, let alone expresses
+any _intent_.
 And then there's the `filter_map()` on that iterator, which in itself is surprisingly ergonomic (hurray for Rust iterators).
 But still it splits the logic in two.
 We could pass the `speaker_filter` into `QuoteIter`, but then we need a generic parameter to capture the type and we need trait bounds on
 `Iterator::next()` just to get started with the code.
 I doubt we're getting closer to readable code with such changes.
 
-And even with our "convenient" example above, one could argue that the implementation involves a lot of boiler plate code.
+And even with our "convenient" example earlier one could argue that the implementation involves a lot of boiler plate code.
 If a developer has to apply this kind of practice in multiple places in the code base, they will surely be tempted to reach for the
 callback or collection approach before long.
 
