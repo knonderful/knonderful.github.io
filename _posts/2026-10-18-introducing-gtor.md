@@ -82,7 +82,7 @@ fn handle_quote(quote: Quote) -> bool {
 fn main() {
     // let input = //... <- read book
     // let mentioned ... <- get `mentioning` parameter
-    let quote_provider = QuoteProvider{ input, mentioned };
+    let quote_provider = QuoteProvider { input, mentioned };
     process_quotes(quote_provider);
 }
 ```
